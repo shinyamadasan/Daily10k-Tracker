@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10K Steps Challenge Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="app-header">
+            <h1>10K Steps Challenge Tracker</h1>
+            <div id="admin-indicator" class="admin-indicator hidden">
+                <span class="admin-badge">🔐 Admin Mode Active</span>
+            </div>
+        </header>
+
+        <!-- Tab Navigation -->
+        <nav class="tab-nav">
+            <button class="tab-btn active" data-tab="submit">Submit Steps</button>
+            <button class="tab-btn" data-tab="tracker">Daily Tracker</button>
+            <button class="tab-btn" data-tab="summary">Payment Summary</button>
+        </nav>
+
+        <!-- Success/Error Messages -->
+        <div id="message-container" class="message-container hidden"></div>
+
+        <!-- Submit Steps Tab -->
+        <div id="submit-tab" class="tab-content active">
+            <div class="card">
+                <div class="card__header">
+                    <h2>Submit Your Daily Steps</h2>
+                </div>
+                <div class="card__body">
+                    <form id="submit-form">
+                        <div class="form-group">
+                            <label for="participant-select" class="form-label">Participant Name</label>
+                            <select id="participant-select" class="form-control" required>
+                                <option value="">Select your name</option>
+                                <option value="Del">Del</option>
+                                <option value="Giem">Giem</option>
+                                <option value="Glaiz">Glaiz</option>
+                                <option value="Jeun">Jeun</option>
+                                <option value="Joy">Joy</option>
+                                <option value="Kokoy">Kokoy</option>
+                                <option value="Leanne">Leanne</option>
+                                <option value="Lui">Lui</option>
+                                <option value="Ramon">Ramon</option>
+                                <option value="Robert">Robert</option>
+                                <option value="Sarah">Sarah</option>
+                                <option value="Sheila">Sheila</option>
+                                <option value="Shin">Shin</option>
+                                <option value="Yohan">Yohan</option>
+                                <option value="Zephanny">Zephanny</option>
+                                <option value="Sam">Sam</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date-input" class="form-label">Date</label>
+                            <input type="date" id="date-input" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="steps-input" class="form-label">Step Count</label>
+                            <input type="number" id="steps-input" class="form-control" min="0" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="proof-upload" class="form-label">Proof Image (Optional)</label>
+                            <input type="file" id="proof-upload" class="form-control" accept="image/*">
+                        </div>
+
+                        <button type="submit" class="btn btn--primary btn--full-width">Submit Steps</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daily Tracker Tab -->
+        <div id="tracker-tab" class="tab-content">
+            <div class="card">
+                <div class="card__header">
+                    <h2>Daily Tracker</h2>
+                    <div class="tracker-controls">
+                        <div class="filter-group">
+                            <input type="text" id="name-filter" class="form-control" placeholder="Filter by name">
+                            <input type="date" id="date-from" class="form-control" placeholder="From date">
+                            <input type="date" id="date-to" class="form-control" placeholder="To date">
+                            <button id="clear-filters" class="btn btn--secondary">Clear</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card__body">
+                    <div class="table-container">
+                        <table id="tracker-table" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Name</th>
+                                    <th>Steps</th>
+                                    <th>Status</th>
+                                    <th>Proof</th>
+                                    <th>Amount Owed</th>
+                                    <th id="actions-header" class="admin-only hidden">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tracker-tbody">
+                                <tr class="empty-state">
+                                    <td colspan="7">No entries yet. Start by submitting your daily steps!</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="tracker-summary" class="tracker-summary">
+                        <div class="summary-item">
+                            <span class="summary-label">Total Entries:</span>
+                            <span id="total-entries">0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Total Amount Owed:</span>
+                            <span id="total-owed">₱0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Summary Tab -->
+        <div id="summary-tab" class="tab-content">
+            <div class="card">
+                <div class="card__header">
+                    <h2>Payment Summary</h2>
+                    <div class="summary-actions">
+                        <button id="admin-toggle" class="btn btn--outline">🔐 Enable Admin Mode</button>
+                        <div class="admin-only hidden">
+                            <button id="export-tracker" class="btn btn--secondary">Export Tracker</button>
+                            <button id="export-summary" class="btn btn--secondary">Export Summary</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card__body">
+                    <div class="table-container">
+                        <table id="summary-table" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Total Days</th>
+                                    <th>Days Missed</th>
+                                    <th>Amount Owed</th>
+                                    <th>Completion Rate</th>
+                                    <th id="payment-header" class="admin-only hidden">Payment Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="summary-tbody">
+                                <tr class="empty-state">
+                                    <td colspan="6">No data available yet.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="grand-totals" class="grand-totals">
+                        <div class="total-item">
+                            <span class="total-label">Grand Total Owed:</span>
+                            <span id="grand-total-owed">₱0</span>
+                        </div>
+                        <div class="total-item admin-only hidden">
+                            <span class="total-label">Total Collected:</span>
+                            <span id="total-collected">₱0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Controls -->
+            <div class="card admin-controls admin-only hidden">
+                <div class="card__header">
+                    <h3>Admin Controls</h3>
+                </div>
+                <div class="card__body">
+                    <div class="admin-actions">
+                        <button id="clear-all-data" class="btn btn--outline">Clear All Data</button>
+                        <button id="backup-data" class="btn btn--secondary">Backup Data</button>
+                        <button id="restore-data" class="btn btn--secondary">Restore Data</button>
+                    </div>
+                    <div class="recent-entries">
+                        <h4>Recent Entries (Last 10)</h4>
+                        <div id="recent-entries-list" class="recent-list">
+                            <p class="empty-text">No recent entries</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Modal -->
+    <div id="password-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Admin Authentication</h3>
+                <button id="close-password-modal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="password-form">
+                    <div class="form-group">
+                        <label for="admin-password" class="form-label">Enter Admin Password</label>
+                        <input type="password" id="admin-password" class="form-control" required>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" id="cancel-password" class="btn btn--secondary">Cancel</button>
+                        <button type="submit" class="btn btn--primary">Authenticate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Entry</h3>
+                <button id="close-modal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-form">
+                    <div class="form-group">
+                        <label for="edit-steps" class="form-label">Step Count</label>
+                        <input type="number" id="edit-steps" class="form-control" min="0" required>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" id="cancel-edit" class="btn btn--secondary">Cancel</button>
+                        <button type="submit" class="btn btn--primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirm Action</h3>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-message"></p>
+                <div class="modal-actions">
+                    <button id="confirm-cancel" class="btn btn--secondary">Cancel</button>
+                    <button id="confirm-yes" class="btn btn--primary">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
